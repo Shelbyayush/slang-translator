@@ -17,21 +17,21 @@ os.environ["HUGGINGFACE_HUB_TOKEN"] = "f_dHMvtQsUlDqCIBaWCSJfpgcsVwnVArbdQw"
 model_pipeline = None
 
 def load_model():
-    """Load the Mistral model for translation"""
+    """Load a lightweight model for translation"""
     global model_pipeline
     
     if model_pipeline is None:
         try:
-            logger.info("Loading Mistral model...")
-            # Use a smaller, more efficient model for Render
+            logger.info("Loading lightweight model...")
+            # Use a very small, fast model for Railway
             model_pipeline = pipeline(
                 "text-generation",
-                model="microsoft/DialoGPT-medium",  # Smaller model for Render
+                model="distilgpt2",  # Very small and fast model
                 device=-1,  # Use CPU
-                max_length=256,
+                max_length=128,
                 do_sample=True,
                 temperature=0.7,
-                pad_token_id=50256,  # Add pad token
+                pad_token_id=50256,
             )
             logger.info("Model loaded successfully!")
         except Exception as e:
