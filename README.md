@@ -122,3 +122,5 @@ Slang_Translator/
 ---
 
 **Ready to translate? Run `./run_web_app.sh` and start converting formal text to slang!** 🎉
+
+made a new branch "test_new_changes"
