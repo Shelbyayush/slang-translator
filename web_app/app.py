@@ -98,8 +98,8 @@ def health():
     return jsonify({'status': 'healthy', 'model_loaded': model_pipeline is not None})
 
 if __name__ == '__main__':
-    # Get port from environment variable (Fly.io requirement)
-    port = int(os.environ.get('PORT', 8080))
+    # Get port from environment variable (Railway requirement)
+    port = int(os.environ.get('PORT', 5000))
     
     # Load model on startup (commented out for faster startup)
     # load_model()
