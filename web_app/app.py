@@ -17,27 +17,40 @@ os.environ["HUGGINGFACE_HUB_TOKEN"] = "f_dHMvtQsUlDqCIBaWCSJfpgcsVwnVArbdQw"
 model_pipeline = None
 
 def load_model():
-    """Load a lightweight model for translation"""
+    """Load the Mistral model for translation"""
     global model_pipeline
     
     if model_pipeline is None:
         try:
-            logger.info("Loading lightweight model...")
-            # Use a very small, fast model for Railway
+            logger.info("Loading Mistral model...")
             model_pipeline = pipeline(
                 "text-generation",
-                model="distilgpt2",  # Very small and fast model
+                model="mistralai/Mistral-7B-Instruct-v0.2",
                 device=-1,  # Use CPU
-                max_length=128,
+                torch_dtype=torch.float16,
+                max_length=512,
                 do_sample=True,
                 temperature=0.7,
-                pad_token_id=50256,
+                top_p=0.9,
             )
             logger.info("Model loaded successfully!")
         except Exception as e:
-            logger.error(f"Failed to load model: {e}")
-            # Simple fallback - return None and handle in translate function
-            model_pipeline = None
+            logger.error(f"Failed to load Mistral model: {e}")
+            # Fallback to smaller model
+            try:
+                logger.info("Loading fallback model...")
+                model_pipeline = pipeline(
+                    "text-generation",
+                    model="microsoft/DialoGPT-medium",
+                    device=-1,
+                    max_length=256,
+                    do_sample=True,
+                    temperature=0.7,
+                )
+                logger.info("Fallback model loaded!")
+            except Exception as e2:
+                logger.error(f"Failed to load fallback model: {e2}")
+                model_pipeline = None
 
 @app.route('/')
 def index():
@@ -60,27 +73,23 @@ def translate():
         if model_pipeline is None:
             return jsonify({'error': 'Model not available'}), 500
         
-        # Create prompt for translation
-        prompt = f"Translate this formal text to informal slang: {formal_text}\nInformal:"
+        # Create prompt for Mistral
+        prompt = f"<s>[INST] Translate the following formal English sentence to informal slang: {formal_text} [/INST]"
         
         # Generate translation
         result = model_pipeline(
             prompt, 
             max_new_tokens=50, 
-            pad_token_id=50256,
-            temperature=0.7,
-            do_sample=True
+            pad_token_id=model_pipeline.tokenizer.eos_token_id
         )
         
         # Extract response
         generated_text = result[0]['generated_text']
         informal_text = generated_text.replace(prompt, "").strip()
         
-        # Clean up response - remove any extra tokens
+        # Clean up response
         if informal_text.endswith("</s>"):
             informal_text = informal_text[:-4].strip()
-        if informal_text.endswith("<|endoftext|>"):
-            informal_text = informal_text[:-13].strip()
         
         return jsonify({
             'formal': formal_text,
