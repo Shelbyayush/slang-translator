@@ -3,9 +3,11 @@ services:
     name: slang-translator
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: python app.py
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
     envVars:
       - key: HUGGINGFACE_HUB_TOKEN
         value: f_dHMvtQsUlDqCIBaWCSJfpgcsVwnVArbdQw
       - key: PYTHON_VERSION
         value: 3.9.18
+      - key: PORT
+        value: 10000

@@ -23,47 +23,21 @@ def load_model():
     if model_pipeline is None:
         try:
             logger.info("Loading Mistral model...")
+            # Use a smaller, more efficient model for Render
             model_pipeline = pipeline(
                 "text-generation",
-                model="mistralai/Mistral-7B-Instruct-v0.2",
+                model="microsoft/DialoGPT-medium",  # Smaller model for Render
                 device=-1,  # Use CPU
-                torch_dtype=torch.float16,
-                max_length=512,
+                max_length=256,
                 do_sample=True,
                 temperature=0.7,
-                top_p=0.9,
+                pad_token_id=50256,  # Add pad token
             )
             logger.info("Model loaded successfully!")
         except Exception as e:
-            logger.error(f"Failed to load Mistral model: {e}")
+            logger.error(f"Failed to load model: {e}")
+            # Simple fallback - return None and handle in translate function
             model_pipeline = None
-
-def translate_text(pipe, formal_text):
-    """Translate formal text to informal using Mistral"""
-    try:
-        # Create prompt for Mistral
-        prompt = f"<s>[INST] Translate the following formal English sentence to informal slang: {formal_text} [/INST]"
-        
-        # Generate translation
-        result = pipe(
-            prompt, 
-            max_new_tokens=50, 
-            pad_token_id=pipe.tokenizer.eos_token_id
-        )
-        
-        # Extract response
-        generated_text = result[0]['generated_text']
-        informal_text = generated_text.replace(prompt, "").strip()
-        
-        # Clean up response
-        if informal_text.endswith("</s>"):
-            informal_text = informal_text[:-4].strip()
-        
-        return informal_text
-        
-    except Exception as e:
-        logger.error(f"Translation error: {e}")
-        return f"Translation failed: {str(e)}"
 
 @app.route('/')
 def index():
@@ -84,10 +58,29 @@ def translate():
             load_model()
         
         if model_pipeline is None:
-            return jsonify({'error': 'Model not available. Please try again in a moment.'}), 500
+            return jsonify({'error': 'Model not available'}), 500
         
-        # Translate the text
-        informal_text = translate_text(model_pipeline, formal_text)
+        # Create prompt for translation
+        prompt = f"Translate this formal text to informal slang: {formal_text}\nInformal:"
+        
+        # Generate translation
+        result = model_pipeline(
+            prompt, 
+            max_new_tokens=50, 
+            pad_token_id=50256,
+            temperature=0.7,
+            do_sample=True
+        )
+        
+        # Extract response
+        generated_text = result[0]['generated_text']
+        informal_text = generated_text.replace(prompt, "").strip()
+        
+        # Clean up response - remove any extra tokens
+        if informal_text.endswith("</s>"):
+            informal_text = informal_text[:-4].strip()
+        if informal_text.endswith("<|endoftext|>"):
+            informal_text = informal_text[:-13].strip()
         
         return jsonify({
             'formal': formal_text,
@@ -105,15 +98,11 @@ def health():
     return jsonify({'status': 'healthy', 'model_loaded': model_pipeline is not None})
 
 if __name__ == '__main__':
-    # Use port 5002 to avoid conflicts
-    port = 5002
+    # Get port from environment variable (Render requirement)
+    port = int(os.environ.get('PORT', 5002))
     
-    # Load model on startup
-    load_model()
+    # Load model on startup (commented out for faster startup on Render)
+    # load_model()
     
     # Run the app
-    print(f"🚀 Starting Slang Translator with Mistral on http://localhost:{port}")
-    print("📱 Open your browser and go to the URL above")
-    print("⏹️  Press Ctrl+C to stop the server")
-    
-    app.run(debug=True, host='0.0.0.0', port=port)
+    app.run(debug=False, host='0.0.0.0', port=port)
