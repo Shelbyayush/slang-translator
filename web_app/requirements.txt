@@ -1,0 +1,7 @@
+Flask==2.3.3
+torch==2.0.1
+transformers==4.35.0
+accelerate==0.24.1
+sentencepiece==0.1.99
+protobuf==3.20.3
+huggingface_hub==0.34.4

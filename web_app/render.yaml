@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: slang-translator
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
+    envVars:
+      - key: HUGGINGFACE_HUB_TOKEN
+        value: f_dHMvtQsUlDqCIBaWCSJfpgcsVwnVArbdQw
+      - key: PYTHON_VERSION
+        value: 3.9.18
