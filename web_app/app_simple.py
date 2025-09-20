@@ -40,12 +40,12 @@ def simple_translate(formal_text):
     if text_lower in TRANSLATION_MAPPINGS:
         return TRANSLATION_MAPPINGS[text_lower]
     
-    # Simple word replacements
+    # More comprehensive translation mappings
     replacements = {
+        "i would like to": "i want to",
         "please": "",
         "would you": "can you",
         "could you": "can you",
-        "i would like to": "i want to",
         "i am": "i'm",
         "you are": "you're",
         "it is": "it's",
@@ -54,21 +54,42 @@ def simple_translate(formal_text):
         "will not": "won't",
         "should not": "shouldn't",
         "thank you": "thanks",
-        "please let me know": "let me know",
         "i appreciate": "thanks for",
         "i apologize": "sorry",
         "i hope": "hoping",
-        "i look forward to": "looking forward to"
+        "i look forward to": "looking forward to",
+        "please let me know": "let me know",
+        "i would be grateful": "it would be awesome",
+        "i regret to inform": "unfortunately",
+        "i am pleased to": "great news!",
+        "please be advised": "heads up",
+        "i would like to take this opportunity": "wanted to mention",
+        "please find attached": "here's the file",
+        "i look forward to hearing from you": "let me know what you think",
+        "please do not hesitate to contact me": "feel free to reach out",
+        "i would like to schedule a meeting": "want to meet up?",
+        "please confirm your attendance": "are you coming?",
+        "i am writing to inform you": "just wanted to let you know",
+        "i would like to express my gratitude": "thanks so much",
+        "i hope this email finds you well": "hey there",
+        "i apologize for the inconvenience": "sorry about that"
     }
     
     result = formal_text
-    for formal, informal in replacements.items():
-        result = result.replace(formal, informal)
+    # Apply replacements in order of length (longest first)
+    for formal, informal in sorted(replacements.items(), key=lambda x: len(x[0]), reverse=True):
+        if formal in text_lower:
+            result = result.replace(formal, informal)
+            break  # Only apply one replacement to avoid conflicts
     
-    # Clean up extra spaces
+    # Clean up extra spaces and punctuation
     result = " ".join(result.split())
     
-    return result if result != formal_text else f"Hey! {formal_text.lower()}"
+    # If no changes were made, add a casual prefix
+    if result == formal_text:
+        result = f"Hey! {formal_text.lower()}"
+    
+    return result
 
 @app.route('/')
 def index():
@@ -82,11 +103,15 @@ def translate():
         data = request.get_json()
         formal_text = data.get('text', '').strip()
         
+        logger.info(f"Received text: '{formal_text}'")
+        
         if not formal_text:
             return jsonify({'error': 'Please enter some text'}), 400
         
         # Use simple translation
         informal_text = simple_translate(formal_text)
+        
+        logger.info(f"Translated to: '{informal_text}'")
         
         return jsonify({
             'formal': formal_text,
@@ -102,6 +127,17 @@ def translate():
 def health():
     """Health check endpoint"""
     return jsonify({'status': 'healthy', 'model_loaded': True})
+
+@app.route('/test')
+def test():
+    """Test translation endpoint"""
+    test_text = "I would like to request your assistance"
+    result = simple_translate(test_text)
+    return jsonify({
+        'input': test_text,
+        'output': result,
+        'status': 'working'
+    })
 
 if __name__ == '__main__':
     # Get port from environment variable
