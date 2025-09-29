@@ -1,16 +1,6 @@
-# Core web framework
 Flask==2.3.3
-gunicorn==21.2.0
-
-# Essential ML libraries (minimal set)
 torch==2.0.1
 transformers==4.35.0
 huggingface_hub>=0.16.4,<1.0
-
-# Supporting libraries
 numpy==1.24.3
 requests==2.31.0
-
-# Additional dependencies for stability
-urllib3>=1.26.0
-certifi>=2022.12.7
