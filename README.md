@@ -122,8 +122,11 @@ docker run -d --name slang-translator-app -p 5000:5000 -e HUGGINGFACE_HUB_TOKEN=
 - **Docker**: Complete containerization process from build to run
 - **Technical**: Terminal commands and container status monitoring
 
+<<<<<<< HEAD
 > **Note**: To add your demo video, simply save it as `demo_video.mov` in the project root and push to GitHub. The video will automatically appear in the README above.
 
+=======
+>>>>>>> 6a61dcfe6c472928d18e7ba087c691f4ef745741
 ## 🚀 Deployment
 
 ### Local Development
