@@ -106,14 +106,9 @@ def health():
     """Health check endpoint"""
     return jsonify({'status': 'healthy', 'model_loaded': model_pipeline is not None})
 
-@app.route('/')
-def index():
-    """Main page"""
-    return render_template('index.html')
-
 if __name__ == '__main__':
     # Get port from environment variable (Docker/Cloud requirement)
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 5001))
     
     # Load model on startup (commented out for faster startup)
     # load_model()

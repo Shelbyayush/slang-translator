@@ -101,7 +101,7 @@
                             </label>
                             <div class="translation-box p-3">
                                 <textarea id="formalText" class="form-control border-0 bg-transparent" rows="3"
-                                    placeholder="Type your formal text here... (e.g., 'I would like to request your assistance')"></textarea>
+                                    placeholder="Type your formal text here... (e.g., 'I would like to request your assistance')&#10;Press Enter to translate, Shift+Enter for new line"></textarea>
                             </div>
                         </div>
 
@@ -223,10 +223,17 @@
             }
         }
 
-        // Allow Enter key to translate
-        document.getElementById('formalText').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter' && e.ctrlKey) {
-                translateText();
+        // Handle keyboard shortcuts
+        document.getElementById('formalText').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                if (e.shiftKey) {
+                    // Shift+Enter: Allow default behavior (new line)
+                    return;
+                } else {
+                    // Enter: Prevent default and translate
+                    e.preventDefault();
+                    translateText();
+                }
             }
         });
     </script>
