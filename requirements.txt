@@ -8,3 +8,4 @@ bitsandbytes
 accelerate
 textblob
 emoji
+flask
