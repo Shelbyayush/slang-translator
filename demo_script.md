@@ -46,9 +46,10 @@
 - "Thank you for watching!"
 
 ## Post-Recording
-- Upload video to YouTube/Vimeo
-- Add link to README.md
-- Update repository with demo link
+- Save video as `demo_video.mp4` in the project root
+- The README is already configured to link to this file
+- Commit and push the video file to GitHub
+- The video will be directly playable in the README
 
 ## Tips for Recording
 - Use a clean desktop background
