@@ -46,7 +46,7 @@
 - "Thank you for watching!"
 
 ## Post-Recording
-- Save video as `demo_video.mp4` in the project root
+- Save video as `demo_video.mov` in the project root
 - The README is already configured to link to this file
 - Commit and push the video file to GitHub
 - The video will be directly playable in the README

@@ -107,7 +107,7 @@ docker run -d --name slang-translator-app -p 5000:5000 -e HUGGINGFACE_HUB_TOKEN=
 
 ## 🎬 Demo Video
 
-**Watch the live demo**: [![Demo Video](https://img.shields.io/badge/📹-Watch%20Demo-red?style=for-the-badge)](demo_video.mp4)
+**Watch the live demo**: [![Demo Video](https://img.shields.io/badge/📹-Watch%20Demo-red?style=for-the-badge)](demo_video.mov)
 
 ### What the demo shows:
 - 🐳 **Docker containerization** - Building and running the container
@@ -122,7 +122,7 @@ docker run -d --name slang-translator-app -p 5000:5000 -e HUGGINGFACE_HUB_TOKEN=
 - **Docker**: Complete containerization process from build to run
 - **Technical**: Terminal commands and container status monitoring
 
-> **Note**: To add your demo video, simply save it as `demo_video.mp4` in the project root and push to GitHub. The video will automatically appear in the README above.
+> **Note**: To add your demo video, simply save it as `demo_video.mov` in the project root and push to GitHub. The video will automatically appear in the README above.
 
 ## 🚀 Deployment
 
