@@ -81,6 +81,40 @@ Slang_Translator/
 - **Model Access**: Automatic authentication
 - **No Manual Setup**: Ready to use out of the box
 
+## 🐳 Docker Deployment
+
+### Quick Start with Docker
+```bash
+# Set your Hugging Face token
+export HUGGINGFACE_HUB_TOKEN="your_token_here"
+
+# Build and run with Docker
+./build_docker.sh
+```
+
+### Manual Docker Commands
+```bash
+# Build the image
+docker build -t slang-translator:latest .
+
+# Run the container
+docker run -d --name slang-translator-app -p 5000:5000 -e HUGGINGFACE_HUB_TOKEN="your_token" slang-translator:latest
+```
+
+### Access the App
+- **Local URL**: http://localhost:5000
+- **Health Check**: http://localhost:5000/health
+
+## 🎬 Demo Video
+
+**Watch the live demo**: [Demo Video Link] (Coming Soon)
+
+The demo shows:
+- Docker containerization
+- Web interface with "Created by Ayush Chaudhary"
+- Real-time translation examples
+- Technical implementation details
+
 ## 🚀 Deployment
 
 ### Local Development
@@ -88,11 +122,10 @@ Slang_Translator/
 ./run_web_app.sh
 ```
 
-### Production (Render)
-1. Push to GitHub
-2. Connect to Render
-3. Set environment variables
-4. Deploy automatically
+### Docker (Recommended)
+```bash
+./build_docker.sh
+```
 
 ## 🛠️ Troubleshooting
 
