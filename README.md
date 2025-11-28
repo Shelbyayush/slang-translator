@@ -1,7 +1,7 @@
 # 🚀 Slang Translator
 
 A powerful AI-powered translator that converts formal English text to informal slang using the Mistral 7B model.
-▶️ [Watch Demo Video](https://github.com/Shelbyayush/slang-translator/raw/main/demo_video.mov)
+▶️ [Download Demo Video](https://github.com/Shelbyayush/slang-translator/raw/main/demo_video.mov)
 ## ✨ Features
 
 - **AI-Powered Translation**: Uses Mistral 7B Instruct model for accurate translations
