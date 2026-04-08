@@ -10,7 +10,8 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = Flask(__name__, template_folder='.')
+# Create Flask app with template folder set to the same directory as this script
+app = Flask(__name__, template_folder=os.path.dirname(os.path.abspath(__file__)))
 
 # Get Hugging Face token
 hf_token = os.getenv("HUGGINGFACE_HUB_TOKEN")
