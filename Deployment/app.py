@@ -2,16 +2,14 @@ import gradio as gr
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel
-from huggingface_hub import login
 import os
 
-# Authenticate with Hugging Face
+# Get Hugging Face token
 hf_token = os.getenv("HUGGINGFACE_HUB_TOKEN")
 if hf_token:
-    login(token=hf_token)
-    print("✓ Authenticated with Hugging Face Hub")
+    print("✓ HUGGINGFACE_HUB_TOKEN found")
 else:
-    print("⚠ Warning: HUGGINGFACE_HUB_TOKEN not set. Gated models may not be accessible.")
+    print("⚠ Warning: HUGGINGFACE_HUB_TOKEN not set. Gated models will fail to load.")
 
 # --- Configuration ---
 # Update this to your Hugging Face username/repo once you upload your adapters
@@ -20,12 +18,13 @@ BASE_MODEL = "meta-llama/Llama-3.2-1B-Instruct"
 
 # --- Load Model & Tokenizer ---
 print("Loading model... this may take a moment.")
-tokenizer = AutoTokenizer.from_pretrained(BASE_MODEL)
+tokenizer = AutoTokenizer.from_pretrained(BASE_MODEL, token=hf_token)
 tokenizer.pad_token = tokenizer.eos_token
 
 # We load in 4-bit to fit in the free CPU RAM of HF Spaces
 model = AutoModelForCausalLM.from_pretrained(
     BASE_MODEL,
+    token=hf_token,
     torch_dtype=torch.float16,
     device_map="auto",
     low_cpu_mem_usage=True
