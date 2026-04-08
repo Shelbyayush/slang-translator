@@ -14,8 +14,10 @@ source nlpenv/bin/activate
 # Install Flask if not already installed
 pip install Flask==2.3.3
 
-# Set Hugging Face token
-export HUGGINGFACE_HUB_TOKEN="f_dHMvtQsUlDqCIBaWCSJfpgcsVwnVArbdQw"
+# Load environment variables from .env file if it exists
+if [ -f ".env" ]; then
+    export $(cat .env | grep -v '^#' | xargs)
+fi
 
 # Start the web app
 echo "🌐 Starting web server on http://localhost:5002"

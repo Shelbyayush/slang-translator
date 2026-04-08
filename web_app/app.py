@@ -10,8 +10,13 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-# Set Hugging Face token
-os.environ["HUGGINGFACE_HUB_TOKEN"] = "f_dHMvtQsUlDqCIBaWCSJfpgcsVwnVArbdQw"
+# Set Hugging Face token from environment variable
+# Token should be provided via environment variable (e.g., from .env file or deployment config)
+hf_token = os.getenv("HUGGINGFACE_HUB_TOKEN")
+if hf_token:
+    os.environ["HUGGINGFACE_HUB_TOKEN"] = hf_token
+else:
+    logger.warning("HUGGINGFACE_HUB_TOKEN not set. Some models may require authentication.")
 
 # Global variable to store the model
 model_pipeline = None
