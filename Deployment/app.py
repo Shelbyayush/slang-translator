@@ -2,6 +2,16 @@ import gradio as gr
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel
+from huggingface_hub import login
+import os
+
+# Authenticate with Hugging Face
+hf_token = os.getenv("HUGGINGFACE_HUB_TOKEN")
+if hf_token:
+    login(token=hf_token)
+    print("✓ Authenticated with Hugging Face Hub")
+else:
+    print("⚠ Warning: HUGGINGFACE_HUB_TOKEN not set. Gated models may not be accessible.")
 
 # --- Configuration ---
 # Update this to your Hugging Face username/repo once you upload your adapters

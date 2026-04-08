@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import torch
-from transformers import pipeline
+from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
+from huggingface_hub import login
 import os
 import logging
 
@@ -10,11 +11,14 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-# Set Hugging Face token from environment variable
-# Token should be provided via environment variable (e.g., from .env file or deployment config)
+# Authenticate with Hugging Face
 hf_token = os.getenv("HUGGINGFACE_HUB_TOKEN")
 if hf_token:
-    os.environ["HUGGINGFACE_HUB_TOKEN"] = hf_token
+    try:
+        login(token=hf_token)
+        logger.info("Successfully authenticated with Hugging Face Hub")
+    except Exception as e:
+        logger.warning(f"Failed to authenticate with Hugging Face: {e}")
 else:
     logger.warning("HUGGINGFACE_HUB_TOKEN not set. Some models may require authentication.")
 
