@@ -1,0 +1,12 @@
+pandas
+torch
+transformers
+datasets
+peft
+trl
+bitsandbytes
+accelerate
+textblob
+emoji
+gradio
+sentencepiece
