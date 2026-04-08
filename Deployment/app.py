@@ -13,7 +13,7 @@ else:
 
 # --- Configuration ---
 # Update this to your Hugging Face username/repo once you upload your adapters
-ADAPTER_REPO = "Shelbyayush/slang-translator-llama-1b" 
+ADAPTER_REPO = "ayushnsfw/slang-translator-llama-1b" 
 BASE_MODEL = "meta-llama/Llama-3.2-1B-Instruct"
 
 # --- Load Model & Tokenizer ---
