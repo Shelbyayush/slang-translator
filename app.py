@@ -10,7 +10,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='.')
 
 # Get Hugging Face token
 hf_token = os.getenv("HUGGINGFACE_HUB_TOKEN")
